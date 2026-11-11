@@ -4,7 +4,7 @@ Next.js 16 App Router app (React 19) for HireLoop auth/entry UI. Single package,
 
 ## Commands
 
-- `npm run dev` — dev server on http://localhost:3000 (Turbopack, required by config — not optional)
+- `npm run dev` — dev server on http://localhost:3000 (Turbopack is the default in Next 16; `next.config.ts` sets Turbopack-specific CSS loaders, so don't opt out to webpack)
 - `npm run build` — production build
 - `npm run lint` — `biome check` (Biome handles format + lint + import sorting; there is no ESLint/Prettier)
 - `npm run format` — `biome format --write`
@@ -14,7 +14,8 @@ Next.js 16 App Router app (React 19) for HireLoop auth/entry UI. Single package,
 ## Architecture
 
 - `src/app` — App Router routes; `src/app/api/auth/[...all]/route.ts` is the better-auth catch-all handler
-- `src/lib/auth.ts` — server better-auth instance: MongoDB database `hireloopDB` via `@better-auth/mongo-adapter`, email/password + GitHub OAuth
+- `src/lib/auth.ts` — server better-auth instance: MongoDB database `hireloopDB` via `@better-auth/mongo-adapter`, email/password only (no OAuth configured)
+- Users carry a `role` string field ("seeker" default) declared in better-auth `user.additionalFields`; forms pass it through `signUp.email` — keep `src/lib/auth.ts` and `src/components/shared/SignUpForm.tsx` in sync when changing roles
 - `src/lib/auth-client.ts` — client-side auth helpers
 - `src/components/ui` — shadcn/ui components; add new ones with `npx shadcn@latest add <name>` (style: `base-nova`, see `components.json`); shared UI in `src/components/shared`
 - `@/*` → `./src/*`
@@ -23,7 +24,7 @@ Next.js 16 App Router app (React 19) for HireLoop auth/entry UI. Single package,
 
 - Next config enables `cacheComponents` and `reactCompiler` — components render under stricter cache semantics than stock Next.js; read the bundled docs first (block below) before writing server components or data fetching
 - Tailwind v4 with no `tailwind.config` — theme lives in `src/app/globals.css`
-- `.env` is gitignored and not committed; running the app requires `MONGO_DB_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` (`localhost:3000` in dev, used as auth baseURL), and `GITHUB_CLIENT_ID`/`GITHUB_CLIENT_SECRET`
+- `.env` is gitignored and not committed; running the app requires `MONGO_DB_URL`, `BETTER_AUTH_SECRET`, and `BETTER_AUTH_URL` (`localhost:3000` in dev, used as auth baseURL)
 
 <!-- BEGIN:nextjs-agent-rules -->
 
