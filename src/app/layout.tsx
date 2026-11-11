@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
 import "./globals.css";
 
 const manrope = Manrope({
-  
   subsets: ["latin"],
 });
-
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,13 +15,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${manrope.className} h-full antialiased`}
-    >
+    <html  style={{ scrollBehavior: "smooth" }} lang="en" className={`${manrope.className} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
