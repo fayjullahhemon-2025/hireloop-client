@@ -15,8 +15,9 @@ Next.js 16 App Router app (React 19) for HireLoop auth/entry UI. Single package,
 
 - `src/app` — App Router routes; `src/app/api/auth/[...all]/route.ts` is the better-auth catch-all handler
 - `src/lib/auth.ts` — server better-auth instance: MongoDB database `hireloopDB` via `@better-auth/mongo-adapter`, email/password only (no OAuth configured)
-- Users carry a `role` string field ("seeker" default) declared in better-auth `user.additionalFields`; forms pass it through `signUp.email` — keep `src/lib/auth.ts` and `src/components/shared/SignUpForm.tsx` in sync when changing roles
-- `src/lib/auth-client.ts` — client-side auth helpers
+- Users carry a `role` string field ("seeker" default, optional, client-settable) declared in better-auth `user.additionalFields`; forms pass it through `signUp.email`. The role values live in `ROLES` (`src/components/shared/SignUpForm.tsx`: seeker/recruiter/admin) — keep `src/lib/auth.ts` in sync when changing them
+- `src/app/dashboard/{seeker,recruiter,admin}/page.tsx` — role-based dashboard routes; no session/role gating exists yet (`src/app/dashboard/layout.tsx` is an empty stub), so don't assume pages are protected
+- `src/lib/auth-client.ts` exports both a configured `authClient` and a second unconfigured `createAuthClient()` destructured into `signIn/signUp/useSession/signOut` — existing code uses the destructured ones; don't mix them up when adding methods
 - `src/components/ui` — shadcn/ui components; add new ones with `npx shadcn@latest add <name>` (style: `base-nova`, see `components.json`); shared UI in `src/components/shared`
 - `@/*` → `./src/*`
 
